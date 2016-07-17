@@ -83,6 +83,8 @@ double baseline; // baseline pressure
 #define DECLINATION -8.167 // Declination (degrees).
 int LDR_Pin = 0; //analog pin 0 //AAA collide with radioshield?
 
+boolean imudata = false,GPSdata = false;
+
 void setup()
 {
   pinMode(TX_ON, OUTPUT);
@@ -125,6 +127,8 @@ void setup()
   { //AAA imu failed to start
     Serial.println("IMU failed to start\nResetting...\n");
     arduinoReset();
+
+    //Issue with reset we can't keep track of the value of times we reset
   }
 }
 
@@ -257,6 +261,15 @@ void printSensorStatus(double alt)
   Serial.println();
   delay(PRINT_SPEED);
 }
+
+//collect data, in different scenerios
+void collect_data(){
+  
+
+
+  
+}
+
 
 void Transmit()
 {
