@@ -1,0 +1,11 @@
+If IMU goes out:
+
+	locate where glider is and stay with in the boundry 
+
+If GPS goes out:
+	
+	go into dive and start glide at a certaint area
+
+if both goes out:
+	
+	go into dive and do the same thing as GPS 
