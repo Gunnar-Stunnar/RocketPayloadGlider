@@ -230,7 +230,7 @@ void loop()
   delay(15);                           // waits for the servo to get there
 }
 
-void setRollValue
+//void setRollValue
 
 void printSensorStatus(double alt)
 {
@@ -465,8 +465,11 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz)
 
 void arduinoReset()
 {
-  //send arduino reset message to arduino
+  asm volatile ("  jmp 0");
 }
+
+
+
 
 /* todo
  *  clean code
