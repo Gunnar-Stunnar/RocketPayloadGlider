@@ -1,11 +1,11 @@
 public class Flyer {
   private float xPos, yPos, xDestination, yDestination, angle;
   
-  private float maxAngleChange=(float).5;
+  private float maxAngleChange=(float)10;
   
-  private float windDirection=(Math.random()*3.14159*2, windSpeed=0.019*(Math.random()*21+1)/, windDX=Math.cos(windDirection),currentWindDX=0,windDY=Math.sin(windDirection),currentWindDY=0,timeTillWindChange=5,timeLastChange=0;
+  private float windDirection=(float)(Math.random()*3.14159*2), windSpeed=(float)((Math.random()*21+1)/50), windDX=(float)(windSpeed*Math.cos(windDirection)),currentWindDX=0,windDY=(float)(windSpeed*Math.sin(windDirection)),currentWindDY=0,timeTillWindChange=5,timeLastChange=0;
   
-  private float speed = (float)(11*.019);
+  private float speed = (float)(11*1);
    
   public Flyer(float _xPos, float _yPos, float _xDestination, float _yDestination, float _angle) {
     xPos=_xPos;
