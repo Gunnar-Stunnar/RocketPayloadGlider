@@ -10,6 +10,7 @@
 #include <TinyGPS++.h>
 #include <SparkFunLSM9DS1.h>
 #include <Servo.h>
+#include <Narcoleptic.h>
 
 Servo PitchServo;  // create servo object to control a servo
 Servo YawServo;
@@ -83,10 +84,13 @@ double baseline; // baseline pressure
 #define DECLINATION -8.167 // Declination (degrees).
 int LDR_Pin = 0; //analog pin 0 //AAA collide with radioshield?
 
-boolean imudata = false,GPSdata = false;
+boolean imudata = false,GPSdata = false,barometerdata=false;
+
+int codeState;
 
 void setup()
 {
+  codeState=0;
   pinMode(TX_ON, OUTPUT);
   PitchServo.attach(5);  // attaches the servo on pin 5 to the servo object
   YawServo.attach(6);  // attaches the servo on pin 6 to the servo object
@@ -134,6 +138,38 @@ void setup()
 
 void loop()
 {
+  switch(codeState)
+  {
+    //Everthing a-ok
+    case 0: //detect launch
+      
+      break;
+    case 1: //detect eject
+      
+      break;
+    case 2: //detect glide
+      
+      break;
+    case 3: //detect wind direction
+      
+      break;
+    case 4: //begin flight
+      
+      break;
+    case 5: //end of flight
+      
+      break;
+    case 6: //landed on ground
+      
+      break;
+    }
+  
+  
+  
+  
+  
+  
+  
   int LDRReading = analogRead(LDR_Pin);
   //  Serial.println(LDRReading);
   if (LDRReading > 512) {
@@ -235,6 +271,106 @@ void loop()
 }
 
 //void setRollValue
+
+void detectLaunch(char fails)
+{
+  switch(fails)
+  {
+    case 'b': //barometer failed
+      
+      break;
+    case 'i': //imu failed
+      
+      break;
+    default: //everything worked
+      
+      break;
+  }
+}
+
+void detectEject()
+{
+  
+}
+
+void detectGlide(char fails)
+{
+  switch(fails)
+  {
+    case 'c': //everything failed
+      
+      break;
+    case 'i': //imu failed
+      
+      break;
+    default: //everything worked
+      
+      break;
+  }
+}
+
+void detectWindDirection(char fails) //if not able to be find wind, imu down, sets expected wind direction
+{
+  switch(fails)
+  {
+    case 'c': //everthing failed
+    case 'i': //imu failed
+      
+      break;
+    default: //everything worked
+      
+      break;
+  }
+}
+
+void beginFligh(char fails)
+{
+  switch(fails)
+  {
+    case 'c': //everything failed
+      
+      break;
+    case 'b': //barometer failed
+      
+      break;
+    case 'i': //imu failed
+      
+      break;
+    case 'g': //gps failed
+      
+      break;
+    default: //everything worked
+      
+      break;
+  }
+}
+
+void endFlight(char fails)
+{
+  switch(fails)
+  {
+    case 'c': //everything failed
+      
+      break;
+    case 'b': //barometer failed
+      
+      break;
+    case 'i': //imu failed
+      
+      break;
+    case 'g': //gps failed
+      
+      break;
+    default: //everything worked
+      
+      break;
+  }
+}
+
+void landed() //transmit data, keep servos from moving
+{
+  
+}
 
 void printSensorStatus(double alt)
 {
