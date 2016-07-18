@@ -7,9 +7,9 @@ add pitch method
 add yaw method
 	define neutral value for stable forward flight
 	define max value servo can differ from the neutral value
-create a case structure for what to do next		-gunner
-	case for detecting direction of wind
-	decide what to do if some sensors fail
+DONE - create a case structure for what to do next
+	DID - case for detecting direction of wind
+	DID - decide what to do if some sensors fail
 the glider will continualy restart if the IMU or barometer don't respond, do we want some way to stop the glider from restarting after some number of restarts
 DONE - convert long lat to feet
 DONE - translate ellipse or translate the xy coordinates
