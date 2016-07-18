@@ -12,9 +12,9 @@ create a case structure for what to do next		-gunner
 	decide what to do if some sensors fail
 the glider will continualy restart if the IMU or barometer don't respond, do we want some way to stop the glider from restarting after some number of restarts
 DONE - convert long lat to feet
-translate ellipse or translate the xy coordinates
-convert the ellipse program to use an array of floats/doubles (2d?)
-	If 1d array, functions to return x and y of value (points[0] == x0, points[1] == y0, points[2] == x1, points[3] == y1 (something like that))
+DONE - translate ellipse or translate the xy coordinates
+DONE - convert the ellipse program to use an array of floats/doubles (2d?)
+	DID (less memory used, faster access time) - If 1d array, functions to return x and y of value (points[0] == x0, points[1] == y0, points[2] == x1, points[3] == y1 (something like that))
 function to decrease a while under 500/1000 feet
 test for altitude every n seconds and report if under 500/1000 feet
 add a reset pin and code to reset
