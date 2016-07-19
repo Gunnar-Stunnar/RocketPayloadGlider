@@ -86,7 +86,19 @@ int LDR_Pin = 0; //analog pin 0 //AAA collide with radioshield?
 
 boolean imudata = false,GPSdata = false,barometerdata=false;
 
+//state of the code
 int codeState;
+
+//Pathfinding points & other variables related to pathfinding
+float points[56]; //the array containing all
+int goingToPoint;
+int destinationXY[2];
+float a;
+float b;
+float o;
+int scalar;
+
+#define radToDegrees (180/3.14159)
 
 void setup()
 {
@@ -134,6 +146,10 @@ void setup()
 
     //Issue with reset we can't keep track of the value of times we reset
   }
+  a=0.8;
+  b=0.5+a/4;
+  goingToPoint=0;
+  scalar=5280;
 }
 
 void loop()
@@ -315,10 +331,11 @@ void detectWindDirection(char fails) //if not able to be find wind, imu down, se
   {
     case 'c': //everthing failed
     case 'i': //imu failed
-      
+      o=0; //AAA expected wind direction
       break;
     default: //everything worked
-      
+      //narcoleptic sleep?/sleep 
+      //o=gyro angle (may be backwards?)
       break;
   }
 }
@@ -617,8 +634,45 @@ void arduinoReset()
   asm volatile ("  jmp 0");
 }
 
-
-
+void createPathfindingPoints()
+{  
+  int quarterOfPoints=7;
+  //create point objects
+  //points=new float[quarterOfPoints*8];
+  //quarter 0 and 2 move in the same direction, however, 1 and 3 move in the opposite direction
+  for(int i=0;i<quarterOfPoints;i++) {
+    float c=sqrt(a*a-b*b);
+    float x=1;
+    float y1=tan((90/(quarterOfPoints-i)-90/quarterOfPoints)/radToDegrees);
+    float x_1=(float)((a*b)/sqrt(pow(a,2)*pow(y1,2)+pow(b,2)*pow(x,2))*x); //
+    float y_1=(float)((a*b)/sqrt(pow(a,2)*pow(y1,2)+pow(b,2)*pow(x,2))*y1);
+    //set 1st and 2nd quarters.
+    points[i*2] = (x_1+c)*cos(o)-y_1*sin(o);
+    points[i*2+1] = y_1*cos(o)+(x_1+c)*sin(o);
+    points[quarterOfPoints*4+i*2] =(-x_1+c)*cos(o)+y_1*sin(o);
+    points[quarterOfPoints*4+i*2+1] =-y_1*cos(o)+(-x_1+c)*sin(o);
+    float x_2;
+    float y_2;
+    //shift values over by one
+    if(i!=0) {
+      float y2=tan((90/(i+0)-90/quarterOfPoints)/radToDegrees);
+      x_2=-(float)((a*b)/sqrt(pow(a,2)*pow(y2,2)+pow(b,2)*pow(x,2))*x); //
+      y_2=(float)((a*b)/sqrt(pow(a,2)*pow(y2,2)+pow(b,2)*pow(x,2))*y2);
+    } else {
+      x_2=0; //?
+      y_2=b;
+    }
+    //set 1st and 3rd quarters
+    points[quarterOfPoints*2+i*2] = (x_2+c)*cos(o)-y_2*sin(o);
+    points[quarterOfPoints*2+i*2+1] = y_2*cos(o)+(x_2+c)*sin(o);
+    points[quarterOfPoints*6+i*2] = (-x_2+c)*cos(o)+y_2*sin(o);
+    points[quarterOfPoints*6+i*2+1] = -y_2*cos(o)+(-x_2+c)*sin(o);
+  }
+  if(goingToPoint*2>=56)
+    goingToPoint=0;
+  destinationXY[0]=points[goingToPoint*2]*scalar;
+  destinationXY[1]=points[goingToPoint*2+1]*scalar;
+}
 
 /* todo
  *  clean code
