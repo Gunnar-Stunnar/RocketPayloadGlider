@@ -142,8 +142,8 @@ void createPathfindingPoints()
   }
   if(goingToPoint*2>=56)
     goingToPoint=0;
-  destinationXY[0]=points[goingToPoint*2]*scalar;
-  destinationXY[1]=points[goingToPoint*2+1]*scalar;
+  target[0]=points[goingToPoint*2]*scalar;
+  target[1]=points[goingToPoint*2+1]*scalar;
 }
 
 
