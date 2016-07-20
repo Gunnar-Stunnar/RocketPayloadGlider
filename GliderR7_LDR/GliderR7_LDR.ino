@@ -15,6 +15,9 @@
 Servo PitchServo;  // create servo object to control a servo
 Servo YawServo;
 
+  int angPitch = 0;
+  int angYaw = 0;
+
 //////////////////////////
 // LSM9DS1 Library Init //
 //////////////////////////
@@ -88,6 +91,9 @@ boolean imudata = false,GPSdata = false,barometerdata=false;
 
 int codeState;
 
+//oreintation when shot out of rocket
+float r = 0;
+float radToDegrees = 180/3.14159;
 void setup()
 {
   codeState=0;
@@ -263,8 +269,7 @@ void loop()
       Serial.println("Turn completely around.");
     */
   }
-  int Pval = map(Pval, 0, 1023, 0, 180);     // scale it to use it with the servo (value between 0 and 180)
-  PitchServo.write(Pval);                  // sets the servo position according to the scaled value
+ 
   int Yval = map(Yval, 0, 1023, 0, 180);     // scale it to use it with the servo (value between 0 and 180)
   YawServo.write(Yval);                  // sets the servo position according to the scaled value
   delay(15);                           // waits for the servo to get there
@@ -642,3 +647,57 @@ void arduinoReset()
  *  
  *  /
  */
+
+void navigation(){
+
+
+  
+
+}
+
+void setPitch(int ang){
+
+  imu.readAccel();
+  int pitch = (int)atan2(-imu.ax, sqrt(imu.ay * imu.ay + imu.az * imu.az)); //reads the accel values and turns them into pitch
+
+       
+  
+  while(abs(ang - pitch) >= 5){
+
+    angPitch += (ang-pitch)/abs(ang-pitch);
+      
+   PitchServo.write(constrain(angPitch,0,180)); // scale it to use it with the servo (value between 0 and 180)
+    delay(30);
+    imu.readAccel();
+    pitch = (int)atan2(-imu.ax, sqrt(imu.ay * imu.ay + imu.az * imu.az));
+   
+  }
+  
+}
+
+void setRoll(int ang){
+
+  imu.readAccel();
+  int roll = (int)atan2(imu.ay,imu.az); //reads the accel values and turns them into pitch
+
+       
+  
+  while(abs(ang - roll) >= 5){
+
+    angYaw += (ang-roll)/abs(ang-roll);
+      
+   YawServo.write(constrain(angYaw,0,180)); // scale it to use it with the servo (value between 0 and 180)
+    delay(30);
+    imu.readAccel();
+    roll = (int)atan2(imu.ay,imu.az);
+   
+  }
+  
+}
+
+
+
+
+
+
+
