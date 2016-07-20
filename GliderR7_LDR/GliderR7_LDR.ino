@@ -662,11 +662,11 @@ void setPitch(int ang){
 
        
   
-  while(ang - pitch >= 5){
+  while(abs(ang - pitch) >= 5){
 
     angPitch += (ang-pitch)/abs(ang-pitch);
       
-   PitchServo.write(map(angPitch, 0, 1023, 0, 180)); // scale it to use it with the servo (value between 0 and 180)
+   PitchServo.write(constrain(angPitch,0,180)); // scale it to use it with the servo (value between 0 and 180)
     delay(30);
     imu.readAccel();
     pitch = (int)atan2(-imu.ax, sqrt(imu.ay * imu.ay + imu.az * imu.az));
@@ -675,25 +675,27 @@ void setPitch(int ang){
   
 }
 
-/*void setRoll(int ang){
-      
+void setRoll(int ang){
+
   imu.readAccel();
-  int roll = (int)atan2(imu.ay,imu.ax); //reads the accel values and turns them into pitch
+  int roll = (int)atan2(imu.ay,imu.az); //reads the accel values and turns them into pitch
 
        
   
-  while(ang - roll >= 5){
+  while(abs(ang - roll) >= 5){
 
-    //angPitch += (ang-pitch)/abs(ang-pitch);
+    angYaw += (ang-roll)/abs(ang-roll);
       
-   //PitchServo.write(map(angPitch, 0, 1023, 0, 180)); // scale it to use it with the servo (value between 0 and 180)
+   YawServo.write(constrain(angYaw,0,180)); // scale it to use it with the servo (value between 0 and 180)
     delay(30);
     imu.readAccel();
-   roll = (int)atan2(imu.ay,imu.ax);
+    roll = (int)atan2(imu.ay,imu.az);
    
   }
   
-}*/
+}
+
+
 
 
 
