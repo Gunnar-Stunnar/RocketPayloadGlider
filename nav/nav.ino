@@ -1,19 +1,19 @@
 
 
 
-float a = 2 * 5280;
-float b = 1 * 5280 + (a/4); 
+float a = 1.1556;
+float b = 0.5 + (a/4); 
 float c = (float)sqrt(a*a-b*b);
 float points[56];
 
 float target[2];
 float pos[2];    ///WE NEED TO SET THESE-----------------------------------------------------------------------------
-float fang = 0;
+float fang = 0; //this should be more descriptive of its function
 short goingToPoint = 0;
 
 float radToDegrees = 180/3.14159;
-float scalar = .019;
-float o;
+float scalar = 5280;
+float o; //find expected wind direction if wind direction can't be calculated in air.
 
 int pointsPerQuarter = 7;
 void setup() {
@@ -35,7 +35,7 @@ void nav(){
 }
 
 
-double dist(float lat1, float lon1, float lat2, float lon2){
+double dist(float lat1, float lon1, float lat2, float lon2){ //may want to use latToX and lonToY functions below
   
   float R = 20925524.9;
 
@@ -59,10 +59,26 @@ double dist(float lat1, float lon1, float lat2, float lon2){
   return R * c;
 }
 
-void back2Path(){
+float latToX(float gliderLat) //calc distance from lat 0
+{
+  float aX = sin(gliderLat/2) * sin(gliderLat/2);
+  double x = 20925525 * 2 * atan2(sqrt(aX), sqrt(1-aX));
+  if(gliderLat<0)
+    x=-x;  
+  return x;
+}
 
-  
-  float angleDivider = .111111; //change from variable to random internal numbers
+float lonToY(float gliderLon) //calc distance from lon 0
+{
+  //calc difference in y (long)
+  float aY = sin(gliderLon/2) * sin(gliderLon/2);
+  double y = 20925525 * 2 * atan2(sqrt(aY), sqrt(1-aY));
+  if(gliderLon<0)
+    y=-y;
+  return y;
+}
+
+void back2Path(){
   float offset = 60/radToDegrees; 
   int is = -1;
   float dist = 1000000;
@@ -86,7 +102,7 @@ void back2Path(){
 
            angleChange = abs(angleChange);
 
-          float baseDist = (float)((angleChange/angleDivider)*(pow(pos[0]-points[i]*scalar,2)+(pow(pos[1]-points[i+1]*scalar,2))));
+          float baseDist = (float)((angleChange*9)*(pow(pos[0]-points[i]*scalar,2)+(pow(pos[1]-points[i+1]*scalar,2))));
 
           int n = 1;
             for(short j = goingToPoint +1; j<=goingToPoint+9; j++)
